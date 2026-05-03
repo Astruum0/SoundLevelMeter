@@ -1,0 +1,352 @@
+:root {
+  color-scheme: dark;
+  font-family: "Avenir Next", "SF Pro Display", "Segoe UI Variable", sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --bg: #090b10;
+  --bg-glow: #10151f;
+  --panel: rgba(15, 18, 27, 0.88);
+  --panel-soft: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f5f7fb;
+  --muted: #8e99ab;
+  --accent: #73f0c6;
+  --accent-strong: #3ab7ff;
+  --warning: #ff9b53;
+  --danger: #ff6b81;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  --tone: var(--text);
+  --tone-glow: rgba(58, 183, 255, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(58, 183, 255, 0.16), transparent 38%),
+    radial-gradient(circle at bottom, rgba(115, 240, 198, 0.14), transparent 34%),
+    linear-gradient(180deg, var(--bg-glow), var(--bg));
+  color: var(--text);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(circle at center, black 36%, transparent 90%);
+  opacity: 0.6;
+}
+
+.app-shell {
+  width: 100%;
+  height: 100%;
+  padding: 18px;
+}
+
+.dashboard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.tone-neutral {
+  --tone: var(--text);
+  --tone-glow: rgba(58, 183, 255, 0.18);
+}
+
+.tone-safe {
+  --tone: var(--accent);
+  --tone-glow: rgba(115, 240, 198, 0.3);
+}
+
+.tone-warning {
+  --tone: var(--warning);
+  --tone-glow: rgba(255, 155, 83, 0.34);
+}
+
+.tone-danger {
+  --tone: var(--danger);
+  --tone-glow: rgba(255, 107, 129, 0.36);
+}
+
+.db-stage {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.speedometer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+}
+
+.speedometer-needle {
+  position: absolute;
+  inset: 0;
+}
+
+.speedometer-needle-line {
+  position: absolute;
+  left: 50%;
+  bottom: 112px;
+  width: 3px;
+  height: calc(100% - 144px);
+  border-radius: 999px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tone) 92%, white), var(--tone));
+  box-shadow: 0 0 28px var(--tone-glow);
+  transform: translateX(-50%) rotate(var(--needle-angle));
+  transform-origin: 50% 100%;
+}
+
+.speedometer-needle-cap {
+  position: absolute;
+  left: 50%;
+  bottom: 101px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tone) 72%, white);
+  box-shadow:
+    0 0 0 7px rgba(255, 255, 255, 0.04),
+    0 0 20px var(--tone-glow);
+  transform: translateX(-50%);
+}
+
+.db-number {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3ch;
+  font-family: "SF Pro Display", "Segoe UI Variable", "Helvetica Neue", "Avenir Next", sans-serif;
+  font-size: clamp(5rem, 19vw, 7.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  color: var(--tone);
+  text-shadow:
+    0 0 28px var(--tone-glow),
+    0 0 52px color-mix(in srgb, var(--tone-glow) 46%, transparent);
+}
+
+.db-unit {
+  position: relative;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--tone) 74%, var(--muted));
+}
+
+.controls {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 28px;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.settings-title {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-chevron {
+  display: block;
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid color-mix(in srgb, var(--text) 72%, transparent);
+  border-bottom: 2px solid color-mix(in srgb, var(--text) 72%, transparent);
+  transform: translateY(-1px) rotate(45deg);
+  transform-origin: center;
+  transition: transform 180ms ease;
+}
+
+.settings-chevron.is-open {
+  transform: translateY(-1px) rotate(225deg);
+}
+
+.settings-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 220ms ease,
+    opacity 180ms ease;
+}
+
+.settings-panel.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.settings-panel-inner {
+  overflow: hidden;
+  padding-top: 0;
+}
+
+.settings-panel.is-open .settings-panel-inner {
+  padding-top: 14px;
+}
+
+.select-input,
+.action-button,
+.calibration-button,
+.calibration-readout {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  font: inherit;
+}
+
+.select-input {
+  padding: 1rem 1.1rem;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  appearance: none;
+  outline: none;
+}
+
+.select-input:disabled,
+.action-button:disabled,
+.calibration-button:disabled,
+.calibration-readout:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.calibration-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 0 0;
+}
+
+.calibration-label {
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.calibration-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calibration-button,
+.calibration-readout {
+  width: auto;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.calibration-button {
+  min-width: 48px;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+}
+
+.calibration-readout {
+  min-width: 90px;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+}
+
+.message-card {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  background: var(--panel-soft);
+}
+
+.message-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.action-button {
+  margin-top: 12px;
+  padding: 0.95rem 1rem;
+  color: #031018;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 14px 32px rgba(58, 183, 255, 0.18);
+}
+
+.action-button:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
