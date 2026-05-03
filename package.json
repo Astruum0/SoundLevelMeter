@@ -1,6 +1,6 @@
 {
   "name": "sound-level-meter",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "A lightweight Electron sound level meter for microphone monitoring.",
   "main": "./out/main/index.js",
   "private": true,
@@ -11,7 +11,7 @@
     "preview": "electron-vite preview",
     "dist": "npm run build && electron-builder",
     "dist:mac": "npm run build && electron-builder --mac dmg zip",
-    "dist:win": "npm run build && electron-builder --win nsis zip",
+    "dist:win": "npm run build && electron-builder --win zip --ia32",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
@@ -40,8 +40,12 @@
     "win": {
       "icon": "assets/appIcon.ico",
       "target": [
-        "nsis",
-        "zip"
+        {
+          "target": "zip",
+          "arch": [
+            "ia32"
+          ]
+        }
       ]
     }
   },
